@@ -29,7 +29,7 @@ class UserManager: UserManagerProtocol {
         }
     }
     
-    private func _infoForUser(withID id: Int) async throws -> String {
+    func _infoForUser(withID id: Int) async throws -> String {
         let userData = try await userData(id: id)
         let user = try userFromData(userData)
         let relativeHatchDate = try dateFormatter.relativeHatchDate(from: user.hatchTimestamp)
@@ -37,12 +37,12 @@ class UserManager: UserManagerProtocol {
         return "\(user.name) (ID \(id)) hatched \(relativeHatchDate) ago"
     }
     
-    private func userData(id: Int) async throws -> Data {
+    func userData(id: Int) async throws -> Data {
         let request = URLRequest(url: URL(string: "https://example.com/user_data?id=\(id)")!)
         return try await networkingService.executeDataRequest(request)
     }
     
-    private func userFromData(_ data: Data) throws -> BirdUser {
+    func userFromData(_ data: Data) throws -> BirdUser {
         try JSONDecoder().decode(BirdUser.self, from: data)
     }
     

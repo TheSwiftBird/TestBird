@@ -1,0 +1,28 @@
+{
+  "configurations" : [
+    {
+      "id" : "C9F09846-8617-46D7-87BC-FD554D440C58",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:TestBird.xcodeproj",
+      "identifier" : "66FAF1502C3EF89C00EDA49F",
+      "name" : "TestBirdApp"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:TestBird.xcodeproj",
+        "identifier" : "662EA0732C3FE68900F56E51",
+        "name" : "TestBirdTests"
+      }
+    }
+  ],
+  "version" : 1
+}

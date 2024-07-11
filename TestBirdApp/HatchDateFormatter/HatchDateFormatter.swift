@@ -23,12 +23,12 @@ class HatchDateFormatter: HatchDateFormatterProtocol {
         return try daysElapsed(between: hatchDate, and: currentDate)
     }
     
-    private func daysElapsed(between hatchDate: Date, and referenceDate: Date) throws -> String {
-        guard referenceDate <= hatchDate else {
+    func daysElapsed(between hatchDate: Date, and referenceDate: Date) throws -> String {
+        guard hatchDate <= referenceDate else {
             throw Error.hatchDateIsInFuture
         }
         
-        guard let relativeDate = dateComponentsFormatter.string(from: referenceDate, to: hatchDate) else {
+        guard let relativeDate = dateComponentsFormatter.string(from: hatchDate, to: referenceDate) else {
             throw Error.cannotFormatDateComponents
         }
         

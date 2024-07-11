@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BirdUser: Decodable {
+struct BirdUser: Equatable, Decodable {
     let name: String
     let hatchTimestamp: TimeInterval
 }

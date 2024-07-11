@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		662EA07F2C3FE71600F56E51 /* HatchDateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662EA07E2C3FE71600F56E51 /* HatchDateFormatterTests.swift */; };
+		662EA0812C3FED2D00F56E51 /* UserManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662EA0802C3FED2D00F56E51 /* UserManagerTests.swift */; };
+		662EA0832C3FED7F00F56E51 /* NetworkingServiceStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662EA0822C3FED7F00F56E51 /* NetworkingServiceStub.swift */; };
+		662EA0852C3FED9000F56E51 /* HatchDateFormatterStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662EA0842C3FED9000F56E51 /* HatchDateFormatterStub.swift */; };
 		66FAF1552C3EF89C00EDA49F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FAF1542C3EF89C00EDA49F /* AppDelegate.swift */; };
 		66FAF1572C3EF89C00EDA49F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FAF1562C3EF89C00EDA49F /* SceneDelegate.swift */; };
 		66FAF1592C3EF89C00EDA49F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FAF1582C3EF89C00EDA49F /* ViewController.swift */; };
@@ -22,7 +26,23 @@
 		66FAF1812C3FD3CA00EDA49F /* UserManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FAF1802C3FD3CA00EDA49F /* UserManagerProtocol.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		662EA0782C3FE68900F56E51 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66FAF1492C3EF89C00EDA49F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 66FAF1502C3EF89C00EDA49F;
+			remoteInfo = TestBirdApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		662EA0742C3FE68900F56E51 /* TestBirdTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestBirdTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		662EA07D2C3FE6D200F56E51 /* TestBird.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestBird.xctestplan; sourceTree = "<group>"; };
+		662EA07E2C3FE71600F56E51 /* HatchDateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HatchDateFormatterTests.swift; sourceTree = "<group>"; };
+		662EA0802C3FED2D00F56E51 /* UserManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagerTests.swift; sourceTree = "<group>"; };
+		662EA0822C3FED7F00F56E51 /* NetworkingServiceStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingServiceStub.swift; sourceTree = "<group>"; };
+		662EA0842C3FED9000F56E51 /* HatchDateFormatterStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HatchDateFormatterStub.swift; sourceTree = "<group>"; };
 		66FAF1512C3EF89C00EDA49F /* TestBirdApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestBirdApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66FAF1542C3EF89C00EDA49F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		66FAF1562C3EF89C00EDA49F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -41,6 +61,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		662EA0712C3FE68900F56E51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66FAF14E2C3EF89C00EDA49F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -51,10 +78,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		662EA0752C3FE68900F56E51 /* TestBirdTests */ = {
+			isa = PBXGroup;
+			children = (
+				662EA07D2C3FE6D200F56E51 /* TestBird.xctestplan */,
+				662EA0872C3FEDA100F56E51 /* Suites */,
+				662EA0862C3FED9A00F56E51 /* Doubles */,
+			);
+			path = TestBirdTests;
+			sourceTree = "<group>";
+		};
+		662EA0862C3FED9A00F56E51 /* Doubles */ = {
+			isa = PBXGroup;
+			children = (
+				662EA0822C3FED7F00F56E51 /* NetworkingServiceStub.swift */,
+				662EA0842C3FED9000F56E51 /* HatchDateFormatterStub.swift */,
+			);
+			path = Doubles;
+			sourceTree = "<group>";
+		};
+		662EA0872C3FEDA100F56E51 /* Suites */ = {
+			isa = PBXGroup;
+			children = (
+				662EA07E2C3FE71600F56E51 /* HatchDateFormatterTests.swift */,
+				662EA0802C3FED2D00F56E51 /* UserManagerTests.swift */,
+			);
+			path = Suites;
+			sourceTree = "<group>";
+		};
 		66FAF1482C3EF89C00EDA49F = {
 			isa = PBXGroup;
 			children = (
 				66FAF1532C3EF89C00EDA49F /* TestBirdApp */,
+				662EA0752C3FE68900F56E51 /* TestBirdTests */,
 				66FAF1522C3EF89C00EDA49F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				66FAF1512C3EF89C00EDA49F /* TestBirdApp.app */,
+				662EA0742C3FE68900F56E51 /* TestBirdTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -131,6 +188,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		662EA0732C3FE68900F56E51 /* TestBirdTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 662EA07C2C3FE68900F56E51 /* Build configuration list for PBXNativeTarget "TestBirdTests" */;
+			buildPhases = (
+				662EA0702C3FE68900F56E51 /* Sources */,
+				662EA0712C3FE68900F56E51 /* Frameworks */,
+				662EA0722C3FE68900F56E51 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				662EA0792C3FE68900F56E51 /* PBXTargetDependency */,
+			);
+			name = TestBirdTests;
+			productName = TestBirdTests;
+			productReference = 662EA0742C3FE68900F56E51 /* TestBirdTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		66FAF1502C3EF89C00EDA49F /* TestBirdApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66FAF1652C3EF89E00EDA49F /* Build configuration list for PBXNativeTarget "TestBirdApp" */;
@@ -158,6 +233,10 @@
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
+					662EA0732C3FE68900F56E51 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 66FAF1502C3EF89C00EDA49F;
+					};
 					66FAF1502C3EF89C00EDA49F = {
 						CreatedOnToolsVersion = 15.4;
 					};
@@ -177,11 +256,19 @@
 			projectRoot = "";
 			targets = (
 				66FAF1502C3EF89C00EDA49F /* TestBirdApp */,
+				662EA0732C3FE68900F56E51 /* TestBirdTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		662EA0722C3FE68900F56E51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66FAF14F2C3EF89C00EDA49F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -195,6 +282,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		662EA0702C3FE68900F56E51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				662EA0832C3FED7F00F56E51 /* NetworkingServiceStub.swift in Sources */,
+				662EA0812C3FED2D00F56E51 /* UserManagerTests.swift in Sources */,
+				662EA07F2C3FE71600F56E51 /* HatchDateFormatterTests.swift in Sources */,
+				662EA0852C3FED9000F56E51 /* HatchDateFormatterStub.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66FAF14D2C3EF89C00EDA49F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -213,6 +311,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		662EA0792C3FE68900F56E51 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 66FAF1502C3EF89C00EDA49F /* TestBirdApp */;
+			targetProxy = 662EA0782C3FE68900F56E51 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		66FAF15A2C3EF89C00EDA49F /* Main.storyboard */ = {
@@ -234,6 +340,40 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		662EA07A2C3FE68900F56E51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.TestBirdTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestBirdApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TestBirdApp";
+			};
+			name = Debug;
+		};
+		662EA07B2C3FE68900F56E51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.TestBirdTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestBirdApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TestBirdApp";
+			};
+			name = Release;
+		};
 		66FAF1632C3EF89E00EDA49F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -410,6 +550,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		662EA07C2C3FE68900F56E51 /* Build configuration list for PBXNativeTarget "TestBirdTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				662EA07A2C3FE68900F56E51 /* Debug */,
+				662EA07B2C3FE68900F56E51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		66FAF14C2C3EF89C00EDA49F /* Build configuration list for PBXProject "TestBird" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
