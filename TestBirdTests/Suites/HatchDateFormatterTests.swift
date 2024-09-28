@@ -7,55 +7,43 @@
 
 @testable import TestBirdApp
 
-import XCTest
+import Foundation
+import Testing
 
-final class HatchDateFormatterTests: XCTestCase {
+// This is a test suite, even though it’s not marked as such.
+struct HatchDateFormatterTests {
     
-    private var formatter: HatchDateFormatter!
+    // Gone are variables and force-unwrapping!
+    // Suite instances aren’t reused, so each test method will have its own `formatter`.
+    private let formatter = HatchDateFormatter()
     
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        
-        formatter = HatchDateFormatter()
-    }
+    // `setUp()` and `tearDown()` aren’t needed too!
     
-    func test_daysElapsed_hatchDateInFuture() {
+    // Tags help you organize tests:
+    @Test(.tags(.required, .AppScreen.home))
+    func daysElapsed_hatchDateInFuture() {
         let hatchDate = Date(timeIntervalSince1970: 10_000_000)
         let referenceDate = Date(timeIntervalSince1970: 5_000_000)
         
-        do {
-            let _ = try formatter.daysElapsed(between: hatchDate, and: referenceDate)
-            XCTFail()
-        } catch HatchDateFormatter.Error.hatchDateIsInFuture { } catch {
-            XCTFail()
+        // `#expect` makes sure the *specific* error is thrown.
+        // If there’s a different error or no error at all, the test will fail automatically.
+        #expect(throws: HatchDateFormatter.Error.hatchDateIsInFuture) {
+            try formatter.daysElapsed(between: hatchDate, and: referenceDate)
         }
     }
     
-    func test_daysElapsed_oneWeek() throws {
-        let hatchDate = Date(timeIntervalSince1970: 10_000_000)
-        let referenceDate = Date(timeIntervalSince1970: 10_604_800)
+    // Parameterized testing lets you pass many parameters to a single test.
+    // The organizer and reports will show the parameters as if they were separate tests.
+    @Test(arguments: [
+        (10_000_000, 10_604_800, "7 days"),
+        (10_000_000_000, 10_031_536_000, "365 days"),
+        (10_000_000_000, 10_315_360_000, "3,650 days"),
+    ])
+    func daysElapsed(hatchTimestamp: TimeInterval, referenceTimestamp: TimeInterval, expectedResult: String) throws {
+        let hatchDate = Date(timeIntervalSince1970: hatchTimestamp)
+        let referenceDate = Date(timeIntervalSince1970: referenceTimestamp)
         
-        let daysElapsed = try formatter.daysElapsed(between: hatchDate, and: referenceDate)
-        
-        XCTAssertEqual(daysElapsed, "7 days")
-    }
-    
-    func test_daysElapsed_oneYear() throws {
-        let hatchDate = Date(timeIntervalSince1970: 10_000_000_000)
-        let referenceDate = Date(timeIntervalSince1970: 10_031_536_000)
-        
-        let daysElapsed = try formatter.daysElapsed(between: hatchDate, and: referenceDate)
-        
-        XCTAssertEqual(daysElapsed, "365 days")
-    }
-    
-    func test_daysElapsed_tenYears() throws {
-        let hatchDate = Date(timeIntervalSince1970: 10_000_000_000)
-        let referenceDate = Date(timeIntervalSince1970: 10_315_360_000)
-        
-        let daysElapsed = try formatter.daysElapsed(between: hatchDate, and: referenceDate)
-        
-        XCTAssertEqual(daysElapsed, "3,650 days")
+        #expect(try formatter.daysElapsed(between: hatchDate, and: referenceDate) == expectedResult)
     }
     
 }

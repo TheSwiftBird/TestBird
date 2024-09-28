@@ -7,158 +7,161 @@
 
 @testable import TestBirdApp
 
-import XCTest
+import Foundation
+import Testing
 
-final class UserManagerTests: XCTestCase {
+// `@Suite` lets you customize many things:
+@Suite(
+    "UserManager Tests",
+    .timeLimit(.minutes(1)),
+    .enabled(if: true, "Suites (and individual tests) can be enabled and disabled conditionally")
+) struct UserManagerTests {
     
-    private var manager: UserManager!
+    // When you can’t initialize suite dependencies inline, use a normal initializer (below).
+    private let manager: UserManager
     
-    private var networkingService: NetworkingServiceStub!
-    private var hatchDateFormatter: HatchDateFormatterStub!
+    private let networkingService: NetworkingServiceStub
+    private let hatchDateFormatter: HatchDateFormatterStub
     
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        
+    init() {
         networkingService = NetworkingServiceStub()
         hatchDateFormatter = HatchDateFormatterStub()
         manager = UserManager(networkingService: networkingService, dateFormatter: hatchDateFormatter)
     }
     
-    func test_infoForUser_validInfo() async {
+    @Test(.tags(.required)) func infoForUser_validInfo() async {
         networkingService.executeDataRequest_result = .success(Utilities.validData)
         hatchDateFormatter.relativeHatchDate_result = .success("TEST days")
         
         let info = await manager.infoForUser(withID: 101)
         
-        XCTAssertEqual(info, "TEST Name (ID 101) hatched TEST days ago")
-        XCTAssertEqual(networkingService.executeDataRequest_invocationCount, 1)
-        XCTAssertEqual(
-            networkingService.executeDataRequest_requests[0].url?.absoluteString,
-            "https://example.com/user_data?id=101"
+        #expect(info == "TEST Name (ID 101) hatched TEST days ago")
+        #expect(networkingService.executeDataRequest_invocationCount == 1)
+        
+        #expect(
+            networkingService.executeDataRequest_requests[0].url?.absoluteString
+            == "https://example.com/user_data?id=101"
         )
-        XCTAssertEqual(hatchDateFormatter.relativeHatchDate_invocationCount, 1)
-        XCTAssertEqual(hatchDateFormatter.relativeHatchDate_timestamps[0], 12345)
+        #expect(hatchDateFormatter.relativeHatchDate_invocationCount == 1)
+        #expect(hatchDateFormatter.relativeHatchDate_timestamps[0] == 12345)
     }
     
-    func test_infoForUser_networkingError() async {
+    @Test func infoForUser_networkingError() async {
         networkingService.executeDataRequest_result = .failure(Utilities.Error.networking)
         
         let info = await manager.infoForUser(withID: 343)
         
-        XCTAssertTrue(info.starts(with: "Cannot get info for the user with ID 343"))
-        XCTAssertEqual(hatchDateFormatter.relativeHatchDate_invocationCount, 0)
+        #expect(info.starts(with: "Cannot get info for the user with ID 343"))
+        #expect(hatchDateFormatter.relativeHatchDate_invocationCount == 0)
     }
     
-    func test__infoForUser_validInfo() async throws {
+    @Test func _infoForUser_validInfo() async throws {
         networkingService.executeDataRequest_result = .success(Utilities.validData)
         hatchDateFormatter.relativeHatchDate_result = .success("TEST days")
         
         let info = try await manager._infoForUser(withID: 123)
         
-        XCTAssertEqual(info, "TEST Name (ID 123) hatched TEST days ago")
-        XCTAssertEqual(networkingService.executeDataRequest_invocationCount, 1)
-        XCTAssertEqual(
-            networkingService.executeDataRequest_requests[0].url?.absoluteString, 
-            "https://example.com/user_data?id=123"
+        #expect(info == "TEST Name (ID 123) hatched TEST days ago")
+        #expect(networkingService.executeDataRequest_invocationCount == 1)
+        #expect(
+            networkingService.executeDataRequest_requests[0].url?.absoluteString
+            == "https://example.com/user_data?id=123"
         )
-        XCTAssertEqual(hatchDateFormatter.relativeHatchDate_invocationCount, 1)
-        XCTAssertEqual(hatchDateFormatter.relativeHatchDate_timestamps[0], 12345)
+        #expect(hatchDateFormatter.relativeHatchDate_invocationCount == 1)
+        #expect(hatchDateFormatter.relativeHatchDate_timestamps[0] == 12345)
     }
     
-    func test__infoForUser_networkingError() async {
+    @Test func _infoForUser_networkingError() async {
         networkingService.executeDataRequest_result = .failure(Utilities.Error.networking)
         hatchDateFormatter.relativeHatchDate_result = .success("TEST days")
         
-        do {
-            let _ = try await manager._infoForUser(withID: 789)
-            XCTFail()
-        } catch Utilities.Error.networking { 
-            XCTAssertEqual(networkingService.executeDataRequest_invocationCount, 1)
-            XCTAssertEqual(
-                networkingService.executeDataRequest_requests[0].url?.absoluteString,
-                "https://example.com/user_data?id=789"
-            )
-            XCTAssertEqual(hatchDateFormatter.relativeHatchDate_invocationCount, 0)
-//            XCTAssertTrue(hatchDateFormatter.relativeHatchDate_timestamps.isEmpty)
-        } catch {
-            XCTFail()
+        await #expect(throws: Utilities.Error.networking) {
+            _ = try await manager._infoForUser(withID: 789)
         }
+        
+        #expect(networkingService.executeDataRequest_invocationCount == 1)
+        #expect(
+            networkingService.executeDataRequest_requests[0].url?.absoluteString
+            == "https://example.com/user_data?id=789"
+        )
+        #expect(hatchDateFormatter.relativeHatchDate_invocationCount == 0)
     }
     
-    func test__infoForUser_decodingError() async {
+    @Test(.bug(
+        "https://github.com/swiftlang/swift-testing/issues/738",
+        "Unexpected build errors with guard-case expressions")
+    )
+    func _infoForUser_decodingError() async throws {
         networkingService.executeDataRequest_result = .success(Utilities.invalidData)
         hatchDateFormatter.relativeHatchDate_result = .success("TEST days")
         
-        do {
-            let _ = try await manager._infoForUser(withID: 789)
-            XCTFail()
-        } catch {
-            guard case DecodingError.keyNotFound(let key, _) = error else {
-                return XCTFail()
-            }
-            XCTAssertEqual(key.stringValue, "hatchTimestamp")
+        await #expect {
+            _ = try await manager._infoForUser(withID: 789)
+        } throws: { error in
+            // Strangely, this compiles:
+            guard case .keyNotFound(let key, _) = error as? DecodingError else { return false }
             
-            XCTAssertEqual(networkingService.executeDataRequest_invocationCount, 1)
-            XCTAssertEqual(
-                networkingService.executeDataRequest_requests[0].url?.absoluteString,
-                "https://example.com/user_data?id=789"
-            )
-            XCTAssertEqual(hatchDateFormatter.relativeHatchDate_invocationCount, 0)
+            // But this doesn’t (“Command SwiftCompile failed with a nonzero exit code”):
+            // guard case DecodingError.keyNotFound(let key, _) = error else { return false }
+            
+            return key.stringValue == "hatchTimestamp"
         }
+        
+        #expect(networkingService.executeDataRequest_invocationCount == 1)
+        #expect(
+            networkingService.executeDataRequest_requests[0].url?.absoluteString
+            == "https://example.com/user_data?id=789"
+        )
+        #expect(hatchDateFormatter.relativeHatchDate_invocationCount == 0)
     }
     
-    func test__infoForUser_formattingError() async {
+    @Test func _infoForUser_formattingError() async {
         networkingService.executeDataRequest_result = .success(Utilities.validData)
         hatchDateFormatter.relativeHatchDate_result = .failure(Utilities.Error.formatting)
         
-        do {
-            let _ = try await manager._infoForUser(withID: 789)
-            XCTFail()
-        } catch Utilities.Error.formatting {
-            XCTAssertEqual(networkingService.executeDataRequest_invocationCount, 1)
-            XCTAssertEqual(
-                networkingService.executeDataRequest_requests[0].url?.absoluteString,
-                "https://example.com/user_data?id=789"
-            )
-            XCTAssertEqual(hatchDateFormatter.relativeHatchDate_invocationCount, 1)
-            XCTAssertEqual(hatchDateFormatter.relativeHatchDate_timestamps[0], 12345)
-        } catch {
-            XCTFail()
+        await #expect(throws: Utilities.Error.formatting) {
+            _ = try await manager._infoForUser(withID: 789)
         }
+        
+        #expect(networkingService.executeDataRequest_invocationCount == 1)
+        #expect(
+            networkingService.executeDataRequest_requests[0].url?.absoluteString
+            == "https://example.com/user_data?id=789"
+        )
+        #expect(hatchDateFormatter.relativeHatchDate_invocationCount == 1)
+        #expect(hatchDateFormatter.relativeHatchDate_timestamps[0] == 12345)
     }
     
-    func test_userData_someData() async throws {
+    @Test func userData_someData() async throws {
         networkingService.executeDataRequest_result = .success(Data([1, 2, 3]))
         
         let data = try await manager.userData(id: 999)
         
-        XCTAssertEqual(networkingService.executeDataRequest_invocationCount, 1)
-        XCTAssertEqual(
-            networkingService.executeDataRequest_requests[0].url?.absoluteString,
-            "https://example.com/user_data?id=999"
+        #expect(networkingService.executeDataRequest_invocationCount == 1)
+        #expect(
+            networkingService.executeDataRequest_requests[0].url?.absoluteString
+            == "https://example.com/user_data?id=999"
         )
-        XCTAssertEqual(data, Data([1, 2, 3]))
+        #expect(data == Data([1, 2, 3]))
     }
     
-    func test_userData_noData() async {
+    @Test func userData_noData() async {
         networkingService.executeDataRequest_result = .failure(NSError(domain: "TEST", code: 456))
         
-        do {
-            let _ = try await manager.userData(id: 777)
-            XCTFail()
-        } catch {
-            let error = error as NSError
-            XCTAssertEqual(error.domain, "TEST")
-            XCTAssertEqual(error.code, 456)
-            XCTAssertEqual(networkingService.executeDataRequest_invocationCount, 1)
-            XCTAssertEqual(
-                networkingService.executeDataRequest_requests[0].url?.absoluteString,
-                "https://example.com/user_data?id=777"
-            )
+        await #expect {
+            _ = try await manager.userData(id: 777)
+        } throws: {
+            let error = $0 as NSError
+            return error.domain == "TEST" && error.code == 456
         }
+        #expect(networkingService.executeDataRequest_invocationCount == 1)
+        #expect(
+            networkingService.executeDataRequest_requests[0].url?.absoluteString
+            == "https://example.com/user_data?id=777"
+        )
     }
     
-    func test_userFromData_validData() throws {
+    @Test func userFromData_validData() throws {
         let data = """
         {
             "name": "TEST Name",
@@ -168,14 +171,11 @@ final class UserManagerTests: XCTestCase {
         
         let user = try manager.userFromData(data)
         
-//        XCTAssertEqual(user.name, "TEST Name")
-//        XCTAssertEqual(user.hatchTimestamp, 12345)
-        
         let expectedUser = BirdUser(name: "TEST Name", hatchTimestamp: 12345)
-        XCTAssertEqual(user, expectedUser)
+        #expect(user == expectedUser)
     }
     
-    func test_userFromData_invalidData() {
+    @Test func userFromData_invalidData() {
         let data = """
         {
             "name": "TEST Name",
@@ -183,7 +183,9 @@ final class UserManagerTests: XCTestCase {
         }
         """.data(using: .utf8)!
         
-        XCTAssertThrowsError(try manager.userFromData(data))
+        #expect(throws: DecodingError.self) {
+            try manager.userFromData(data)
+        }
     }
     
 }
